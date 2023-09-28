@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DemoController!{% endblock %}
+{% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
 <style>
@@ -8,9 +8,7 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>La date d'aujourd'hui est {{ date|format_datetime('full', 'short', locale='fr', timezone='Europe/Paris') }} </h1>
-    <br>
-    <h2>{{ slug }}</h2>
-</div>
+    <div class="example-wrapper">
+        <h1>Liste des produits {{ produit }}</h1>
+    </div>
 {% endblock %}
