@@ -15,7 +15,7 @@ class DemoController extends AbstractController
         $date = new \DateTime();
 
         return $this->render('demo/index.html.twig', [
-            'date' => $date->format('l j F Y'),
+            'date' => $date,
         ]);
     }
 }

@@ -12,7 +12,8 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
         "symfony/runtime": "6.3.*",
-        "symfony/yaml": "6.3.*"
+        "symfony/yaml": "6.3.*",
+        "twig/intl-extra": "^3.7"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.10",

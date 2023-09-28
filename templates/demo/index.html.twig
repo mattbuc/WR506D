@@ -9,6 +9,6 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>La date d'aujourd'hui est {{ date }} </h1>
+    <h1>La date d'aujourd'hui est {{ date|format_datetime('full', 'short', locale='fr', timezone='Europe/Paris') }} </h1>
 </div>
 {% endblock %}
