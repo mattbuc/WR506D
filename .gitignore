@@ -8,7 +8,7 @@
 /app/spool/*
 
 # Cache, session files and logs (Symfony3)
-/var/cache/dev
+/var/cache/*
 /var/logs/*
 /var/sessions/*
 !var/cache/.gitkeep
@@ -50,23 +50,3 @@
 
 # Embedded web-server pid file
 /.web-server-pid
-
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
-###< symfony/framework-bundle ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
-
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
