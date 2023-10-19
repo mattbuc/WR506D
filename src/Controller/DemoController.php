@@ -19,6 +19,7 @@ class DemoController extends AbstractController
         return $this->render('demo/index.html.twig', [
             'date' => $date,
             'slug' => $phrase,
+            
         ]);
     }
 }
