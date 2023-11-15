@@ -1,0 +1,17 @@
+<script>
+
+var myHeaders = new Headers();
+myHeaders.append("Accept", "application/json");
+myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2OTk4OTAxNjEsImV4cCI6MTY5OTg5Mzc2MSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGVzdDJAdGVzdC5jb20ifQ.hhYQxFMVHzunUKbFFc5jGyf6p1cxdhBre06ZjoNNOtXG6oE5QYOQ8-7mw5H5Q-wP2ezAi75zHtU9-U9evA6PAA208o9N3c-uvyqb3a4BRb59pjbncHr88gM5xjR_xewk054OeiJV7e7Kq7ocsBexE10YmTB0gojO0N6TuKfsAqu7slIoHG_QMriMZzdq4TIjwkamINIQlB2r_PGDbO5W2quDp3j6WC5rMNlYHkORVi3A3XvuBn45D_2Q-RQ2smXt2VwbJZmiVqIEojMx1kVG1e-Z1FjzRDlsYUEfWwR8Q0vI8qI0U3VzKer-JBkzjIbRzsXnmXgKMuMhudmw-2xzuw");
+
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders};
+
+fetch("http://localhost:8088/WR506D/index.php/api/actors", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+</script>
