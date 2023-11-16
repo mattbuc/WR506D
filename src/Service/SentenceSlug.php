@@ -6,7 +6,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class SentenceSlug
 {
-    public function slugify($sentence) : string
+    public function slugify($sentence): string
     {
         $slugger = new AsciiSlugger();
         $slug = $slugger->slug($sentence);
