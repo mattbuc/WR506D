@@ -45,3 +45,12 @@ jobs:
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
       run: vendor/bin/phpunit
+
+    - name: Run PHPUnit
+      run: vendor/bin/phpunit tests/
+
+    - name: Run PHP_CodeSniffer
+      run: vendor/bin/phpcs --standard=PSR2 src/
+
+    - name: Run PHPMD
+      run: vendor/bin/phpmd src/ text cleancode,codesize,controversial,design,naming
