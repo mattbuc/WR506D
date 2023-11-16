@@ -27,7 +27,5 @@ class EntitySavedEventSubscriber implements EventSubscriber
             // Déclencher l'événement
             $args->getObjectManager()->getEventManager()->dispatchEvent($event);
         }
-
-
     }
 }
