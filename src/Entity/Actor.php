@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ApiResource]
-#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial', 'movies.title' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial',
+    'movies.title' => 'partial'])]
 #[ApiFilter(DateFilter::class, properties: ['dob'])]
 class Actor
 {
