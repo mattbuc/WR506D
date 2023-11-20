@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
             $actors = new Actor();
             $actors->setFirstname($firstname);
             $actors->setLastname($lastname);
-            $actors->setDob(new \DateTime());
+            $actors->setDob($faker->dateTimeThisCentury());
             $actors->setCreatedAt(new \DateTimeImmutable());
 
             $createdActors[] = $actors;
