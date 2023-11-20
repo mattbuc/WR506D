@@ -17,7 +17,7 @@ class LoginApiTest extends WebTestCase
             'password' => $password,
         ];
 
-        $client->request('POST', 'api/login_check', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($payload));
+        $client->request('POST', '/api/login_check', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($payload));
 
         $response = $client->getResponse();
 
