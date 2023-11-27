@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
-#[ApiResource]
+#[ApiResource(paginationType: 'page')]
 class Movie
 {
     #[ORM\Id]
