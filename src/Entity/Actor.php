@@ -6,14 +6,29 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ApiResource(paginationType: 'page')]
+#[Get]
+#[Post(security: 'is_granted("ROLE_ADMIN")')]
+#[GetCollection]
+#[Delete(security: 'is_granted("ROLE_ADMIN")')]
+#[Put(security: 'is_granted("ROLE_ADMIN")')]
+#[Patch(security: 'is_granted("ROLE_ADMIN")')]
 #[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial',
     'movies.title' => 'partial'])]
 #[ApiFilter(DateFilter::class, properties: ['dob'])]
@@ -25,19 +40,32 @@ class Actor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 15)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(min: 2, max: 15)]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $dob = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actor', cascade: ['persist'])]
     private Collection $movies;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(min: 2, max: 5000)]
+    private ?string $reward = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    private ?string $nationality = null;
 
     public function __construct()
     {
@@ -53,7 +81,6 @@ class Actor
     {
         return $this->lastname;
     }
-
     public function setLastname(string $lastname): static
     {
         $this->lastname = $lastname;
@@ -105,6 +132,7 @@ class Actor
         return $this->movies;
     }
 
+
     public function addMovie(Movie $movie): static
     {
         if (!$this->movies->contains($movie)) {
@@ -120,6 +148,30 @@ class Actor
         if ($this->movies->removeElement($movie)) {
             $movie->removeActor($this);
         }
+
+        return $this;
+    }
+
+    public function getReward(): ?string
+    {
+        return $this->reward;
+    }
+
+    public function setReward(?string $reward): static
+    {
+        $this->reward = $reward;
+
+        return $this;
+    }
+
+    public function getNationality(): ?string
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(string $nationality): static
+    {
+        $this->nationality = $nationality;
 
         return $this;
     }
