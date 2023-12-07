@@ -48,6 +48,7 @@ class Movie
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
+    #[Assert\Type('string')]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
