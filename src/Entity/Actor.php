@@ -61,6 +61,7 @@ class Actor
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(min: 2, max: 5000)]
+    #[Assert\Choice(choices: ['Oscar', 'César', 'Palme d\'or'])]
     private ?string $reward = null;
 
     #[ORM\Column(length: 255)]

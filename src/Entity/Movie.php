@@ -68,9 +68,10 @@ class Movie
     private ?string $director = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url]
     private ?string $website = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'movies')]
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'movies', cascade: ['persist'])]
     private Collection $categories;
 
     public function __construct()
@@ -229,7 +230,7 @@ class Movie
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->addMovie($this);
+            $category->addMovies($this);
         }
 
         return $this;
@@ -238,7 +239,7 @@ class Movie
     public function removeCategory(Category $category): static
     {
         if ($this->categories->removeElement($category)) {
-            $category->removeMovie($this);
+            $category->removeMovies($this);
         }
 
         return $this;
