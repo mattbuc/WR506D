@@ -47,7 +47,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             deserialize: false
         )
     ],
-    normalizationContext: ['groups' => ['media_object:read']]
+    normalizationContext: ['groups' => ['media_object:read']],
+    paginationType: 'page'
 )]
 class MediaObject
 {
