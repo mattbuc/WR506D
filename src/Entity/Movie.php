@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\Delete;
@@ -18,6 +19,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
@@ -73,6 +75,9 @@ class Movie
 
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'movies', cascade: ['persist'])]
     private Collection $categories;
+
+    #[ORM\ManyToOne(inversedBy: 'movies')]
+    private ?MediaObject $mediaObject = null;
 
     public function __construct()
     {
@@ -241,6 +246,18 @@ class Movie
         if ($this->categories->removeElement($category)) {
             $category->removeMovies($this);
         }
+
+        return $this;
+    }
+
+    public function getMediaObject(): ?MediaObject
+    {
+        return $this->mediaObject;
+    }
+
+    public function setMediaObject(?MediaObject $mediaObject): static
+    {
+        $this->mediaObject = $mediaObject;
 
         return $this;
     }

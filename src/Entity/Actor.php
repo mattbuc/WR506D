@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ApiResource(paginationType: 'page')]
@@ -67,6 +69,11 @@ class Actor
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     private ?string $nationality = null;
+
+    #[ORM\ManyToOne(inversedBy: 'actors')]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ApiProperty(types: ['https://schema.org/image'])]
+    private ?MediaObject $mediaObject = null;
 
     public function __construct()
     {
@@ -173,6 +180,18 @@ class Actor
     public function setNationality(string $nationality): static
     {
         $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    public function getMediaObject(): ?MediaObject
+    {
+        return $this->mediaObject;
+    }
+
+    public function setMediaObject(?MediaObject $mediaObject): static
+    {
+        $this->mediaObject = $mediaObject;
 
         return $this;
     }
