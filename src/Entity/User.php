@@ -61,6 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = ["ROLE_MEMBER"];
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private ?MediaObject $media_object = null;
 
     /*#[ORM\Column(length: 255, nullable: true)]
@@ -142,6 +143,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }*/
+
+    /**
+     * @see UserInterface
+     */
 
     public function getMediaObject(): ?MediaObject
     {

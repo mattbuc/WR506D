@@ -258,16 +258,13 @@ class Movie
         return $this;
     }
 
-    public function getMediaObject(): ?MediaObject
-    {
-        return $this->mediaObject;
-    }
+    /**
+     * @return Collection<int, MediaObject>
+     */
 
-    public function setMediaObject(?MediaObject $mediaObject): static
+    public function getMediaObject(): Collection
     {
-        $this->mediaObject = $mediaObject;
-
-        return $this;
+        return $this->media_object;
     }
 
     public function addMediaObject(MediaObject $mediaObject): static
