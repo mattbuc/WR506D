@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = ["ROLE_MEMBER"];
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?MediaObject $media_object = null;
+
     /*#[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     private ?string $username = null;*/
@@ -139,4 +142,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }*/
+
+    public function getMediaObject(): ?MediaObject
+    {
+        return $this->media_object;
+    }
+
+    public function setMediaObject(?MediaObject $media_object): static
+    {
+        $this->media_object = $media_object;
+
+        return $this;
+    }
 }

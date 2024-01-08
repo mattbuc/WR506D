@@ -72,6 +72,9 @@ class MediaObject
     #[ORM\OneToMany(mappedBy: 'mediaObject', targetEntity: Movie::class)]
     private Collection $movies;
 
+    #[ORM\OneToOne(mappedBy: 'media_object', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->actors = new ArrayCollection();
@@ -139,6 +142,28 @@ class MediaObject
                 $movie->setMediaObject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setMediaObject(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getMediaObject() !== $this) {
+            $user->setMediaObject($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }
