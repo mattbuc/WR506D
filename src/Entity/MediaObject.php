@@ -66,14 +66,15 @@ class MediaObject
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
 
-    #[ORM\OneToMany(mappedBy: 'mediaObject', targetEntity: Actor::class)]
-    private Collection $actors;
-
-    #[ORM\OneToMany(mappedBy: 'mediaObject', targetEntity: Movie::class)]
-    private Collection $movies;
 
     #[ORM\OneToOne(mappedBy: 'media_object', cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
+    #[ORM\ManyToMany(targetEntity: Actor::class, mappedBy: 'media_object')]
+    private Collection $actors;
+
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'media_object')]
+    private Collection $movies;
 
     public function __construct()
     {
@@ -86,65 +87,6 @@ class MediaObject
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Actor>
-     */
-    public function getActors(): Collection
-    {
-        return $this->actors;
-    }
-
-    public function addActor(Actor $actor): static
-    {
-        if (!$this->actors->contains($actor)) {
-            $this->actors->add($actor);
-            $actor->setMediaObject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeActor(Actor $actor): static
-    {
-        if ($this->actors->removeElement($actor)) {
-            // set the owning side to null (unless already changed)
-            if ($actor->getMediaObject() === $this) {
-                $actor->setMediaObject(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Movie>
-     */
-    public function getMovies(): Collection
-    {
-        return $this->movies;
-    }
-
-    public function addMovie(Movie $movie): static
-    {
-        if (!$this->movies->contains($movie)) {
-            $this->movies->add($movie);
-            $movie->setMediaObject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMovie(Movie $movie): static
-    {
-        if ($this->movies->removeElement($movie)) {
-            // set the owning side to null (unless already changed)
-            if ($movie->getMediaObject() === $this) {
-                $movie->setMediaObject(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -164,6 +106,60 @@ class MediaObject
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Actor>
+     */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor): static
+    {
+        if (!$this->actors->contains($actor)) {
+            $this->actors->add($actor);
+            $actor->addMediaObject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActor(Actor $actor): static
+    {
+        if ($this->actors->removeElement($actor)) {
+            $actor->removeMediaObject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Movie>
+     */
+    public function getMovies(): Collection
+    {
+        return $this->movies;
+    }
+
+    public function addMovie(Movie $movie): static
+    {
+        if (!$this->movies->contains($movie)) {
+            $this->movies->add($movie);
+            $movie->addMediaObject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovie(Movie $movie): static
+    {
+        if ($this->movies->removeElement($movie)) {
+            $movie->removeMediaObject($this);
+        }
 
         return $this;
     }

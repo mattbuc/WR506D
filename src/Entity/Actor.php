@@ -72,14 +72,14 @@ class Actor
     #[Assert\NotBlank]
     private ?string $nationality = null;
 
-    #[ORM\ManyToOne(inversedBy: 'actors')]
-    #[ORM\JoinColumn(nullable: true)]
-    #[ApiProperty(types: ['https://schema.org/image'])]
-    private ?MediaObject $mediaObject = null;
+    #[ORM\ManyToMany(targetEntity: MediaObject::class, inversedBy: 'actors')]
+    private Collection $media_object;
+
 
     public function __construct()
     {
         $this->movies = new ArrayCollection();
+        $this->media_object = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,15 +186,28 @@ class Actor
         return $this;
     }
 
-    public function getMediaObject(): ?MediaObject
+    /**
+     * @return Collection<int, MediaObject>
+     */
+    public function getMediaObject(): Collection
     {
-        return $this->mediaObject;
+        return $this->media_object;
     }
 
-    public function setMediaObject(?MediaObject $mediaObject): static
+    public function addMediaObject(MediaObject $mediaObject): static
     {
-        $this->mediaObject = $mediaObject;
+        if (!$this->media_object->contains($mediaObject)) {
+            $this->media_object->add($mediaObject);
+        }
 
         return $this;
     }
+
+    public function removeMediaObject(MediaObject $mediaObject): static
+    {
+        $this->media_object->removeElement($mediaObject);
+
+        return $this;
+    }
+
 }

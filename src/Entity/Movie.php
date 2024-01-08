@@ -82,13 +82,15 @@ class Movie
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'movies', cascade: ['persist'])]
     private Collection $categories;
 
-    #[ORM\ManyToOne(inversedBy: 'movies')]
-    private ?MediaObject $mediaObject = null;
+
+    #[ORM\ManyToMany(targetEntity: MediaObject::class, inversedBy: 'movies')]
+    private Collection $media_object;
 
     public function __construct()
     {
         $this->actor = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->media_object = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -264,6 +266,22 @@ class Movie
     public function setMediaObject(?MediaObject $mediaObject): static
     {
         $this->mediaObject = $mediaObject;
+
+        return $this;
+    }
+
+    public function addMediaObject(MediaObject $mediaObject): static
+    {
+        if (!$this->media_object->contains($mediaObject)) {
+            $this->media_object->add($mediaObject);
+        }
+
+        return $this;
+    }
+
+    public function removeMediaObject(MediaObject $mediaObject): static
+    {
+        $this->media_object->removeElement($mediaObject);
 
         return $this;
     }
