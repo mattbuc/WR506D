@@ -1,6 +1,7 @@
 api_platform:
-    title: Hello API Platform
+    title: WR506 Movies and Actors API
     version: 1.0.0
+
     # Good defaults for REST APIs
     defaults:
         stateless: true
@@ -8,6 +9,13 @@ api_platform:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
             standard_put: true
+        pagination_items_per_page: 5
+        page_parameter_name: 'page'
+        pagination_enabled: true
+        items_per_page_parameter_name: 'itemsPerPage'
 
     graphql:
-        enabled: true
+        collection:
+            pagination:
+                enabled: true
+
