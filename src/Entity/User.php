@@ -44,16 +44,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Assert\Type('string')]
     #[Groups(['user:read', 'user:create', 'user:update'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
     #[ORM\Column]
+    #[Assert\Type('string')]
     private ?string $password = null;
+
+    // L'assert correspond à la création d'un nouveau user et qu'il n'est pas vide mais que lors de sa création
     #[Assert\NotBlank(groups: ['user:create'])]
+    #[Assert\Type('string')]
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
     #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    private array $roles = ["ROLE_MEMBER"];
+
+    /*#[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
+    private ?string $username = null;*/
     public function getId(): ?int
     {
         return $this->id;
@@ -118,4 +127,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->plainPassword = null;
     }
+    /*
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }*/
 }
