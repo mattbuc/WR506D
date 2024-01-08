@@ -54,19 +54,25 @@ class Movie
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
+    #[Assert\NotBlank]
     private ?int $duration = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('float')]
     private ?float $note = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $entries = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     private ?int $budget = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Type('string')]
     private ?string $director = null;
 
     #[ORM\Column(length: 255, nullable: true)]

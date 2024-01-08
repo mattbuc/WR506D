@@ -48,6 +48,8 @@ class Actor
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 2, max: 15)]
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
