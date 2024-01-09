@@ -10,6 +10,10 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GraphQl\DeleteMutation;
+use ApiPlatform\Metadata\GraphQl\Mutation;
+use ApiPlatform\Metadata\GraphQl\Query;
+use ApiPlatform\Metadata\GraphQl\QueryCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -24,16 +28,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
-#[ApiResource(paginationType: 'page')]
-#[Get]
-#[Post(security: 'is_granted("ROLE_ADMIN")')]
-#[GetCollection]
-#[Delete(security: 'is_granted("ROLE_ADMIN")')]
-#[Put(security: 'is_granted("ROLE_ADMIN")')]
-#[Patch(security: 'is_granted("ROLE_ADMIN")')]
-#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial',
-    'movies.title' => 'partial'])]
-#[ApiFilter(DateFilter::class, properties: ['dob'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Only admins can add books.'),
+        new GetCollection(),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    paginationType: 'page',
+    graphQlOperations: [
+        new Query(),
+        new QueryCollection(),
+        new DeleteMutation(security: "is_granted('ROLE_ADMIN')", name: 'delete'),
+        new Mutation(security: "is_granted('ROLE_ADMIN')", name: 'create'),
+    ]
+)]
 class Actor
 {
     #[ORM\Id]
@@ -72,14 +84,14 @@ class Actor
     #[Assert\NotBlank]
     private ?string $nationality = null;
 
-    #[ORM\ManyToMany(targetEntity: MediaObject::class, inversedBy: 'actors')]
-    private Collection $media_object;
+    #[ORM\ManyToMany(targetEntity: MediaObject::class, inversedBy: 'actors', cascade: ['persist'])]
+    private Collection $mediaObject;
 
 
     public function __construct()
     {
         $this->movies = new ArrayCollection();
-        $this->media_object = new ArrayCollection();
+        $this->mediaObject = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,13 +203,13 @@ class Actor
      */
     public function getMediaObject(): Collection
     {
-        return $this->media_object;
+        return $this->mediaObject;
     }
 
     public function addMediaObject(MediaObject $mediaObject): static
     {
-        if (!$this->media_object->contains($mediaObject)) {
-            $this->media_object->add($mediaObject);
+        if (!$this->mediaObject->contains($mediaObject)) {
+            $this->mediaObject->add($mediaObject);
         }
 
         return $this;
@@ -205,7 +217,7 @@ class Actor
 
     public function removeMediaObject(MediaObject $mediaObject): static
     {
-        $this->media_object->removeElement($mediaObject);
+        $this->mediaObject->removeElement($mediaObject);
 
         return $this;
     }

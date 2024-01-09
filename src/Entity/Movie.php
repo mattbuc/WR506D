@@ -26,7 +26,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use ApiPlatform\Metadata\GraphQl\Query;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 #[ApiResource(
     operations: [
         new Get(),
@@ -41,7 +41,7 @@ use ApiPlatform\Metadata\GraphQl\Query;
         new Query(),
         new QueryCollection(),
         new DeleteMutation(security: "is_granted('ROLE_ADMIN')", name: 'delete'),
-        new Mutation(security: "is_granted('ROLE_ADMIN')", name: 'create')
+        new Mutation(security: "is_granted('ROLE_ADMIN')", name: 'create'),
     ]
 )]
 
@@ -99,15 +99,14 @@ class Movie
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'movies', cascade: ['persist'])]
     private Collection $categories;
 
-
     #[ORM\ManyToMany(targetEntity: MediaObject::class, inversedBy: 'movies')]
-    private Collection $media_object;
+    private Collection $mediaObject;
 
     public function __construct()
     {
         $this->actor = new ArrayCollection();
         $this->categories = new ArrayCollection();
-        $this->media_object = new ArrayCollection();
+        $this->mediaObject = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -278,16 +277,15 @@ class Movie
     /**
      * @return Collection<int, MediaObject>
      */
-
     public function getMediaObject(): Collection
     {
-        return $this->media_object;
+        return $this->mediaObject;
     }
 
     public function addMediaObject(MediaObject $mediaObject): static
     {
-        if (!$this->media_object->contains($mediaObject)) {
-            $this->media_object->add($mediaObject);
+        if (!$this->mediaObject->contains($mediaObject)) {
+            $this->mediaObject->add($mediaObject);
         }
 
         return $this;
@@ -295,7 +293,7 @@ class Movie
 
     public function removeMediaObject(MediaObject $mediaObject): static
     {
-        $this->media_object->removeElement($mediaObject);
+        $this->mediaObject->removeElement($mediaObject);
 
         return $this;
     }
