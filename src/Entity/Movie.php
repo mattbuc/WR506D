@@ -9,6 +9,9 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GraphQl\DeleteMutation;
+use ApiPlatform\Metadata\GraphQl\Mutation;
+use ApiPlatform\Metadata\GraphQl\QueryCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -20,16 +23,30 @@ use Doctrine\ORM\Mapping as ORM;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Metadata\GraphQl\Query;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
-#[ApiResource(paginationType: 'page')]
-#[Get]
-#[Post(security: 'is_granted("ROLE_ADMIN")')]
-#[GetCollection]
-#[Delete(security: 'is_granted("ROLE_ADMIN")')]
-#[Put(security: 'is_granted("ROLE_ADMIN")')]
-#[Patch(security: 'is_granted("ROLE_ADMIN")')]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(security: "is_granted('ROLE_ADMIN')", securityMessage: 'Only admins can add books.'),
+        new GetCollection(),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    paginationType: 'page',
+    graphQlOperations: [
+        new Query(),
+        new QueryCollection(),
+        new DeleteMutation(security: "is_granted('ROLE_ADMIN')", name: 'delete'),
+        new Mutation(security: "is_granted('ROLE_ADMIN')", name: 'create')
+    ]
+)]
+
+
+
 class Movie
 {
     #[ORM\Id]
